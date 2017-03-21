@@ -1,0 +1,5 @@
+# Config for RNA-Seq part
+
+---
+fasta: data/fastqs/{prefix}.fastq
+index: /local/data/genomes/GRCm38.p3/star

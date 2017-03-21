@@ -1,0 +1,14 @@
+from os.path import basename
+
+rule star:
+    input:
+        fasta = "data/fastqs/{prefix}.fastq",
+        index = config["index"]
+    output:
+        "data/aligned/{prefix}.sam"
+    run:
+        output_prefix = basename(output[0])
+
+        input.index = "/local/data/genomes/GRCm38.p3/star"
+
+        shell("STAR --genomeDir {input.index} --readFilesIn {input.fasta} --readFilesCommand zcat -f --outFileNamePrefix {output_prefix} --chimSegmentMin 30 --runThreadN 12 --outFilterMultimapNmax 20 --alignSJoverhangMin 8 --alignSJDBoverhangMin 1 --outFilterMismatchNmax 10 --outFilterMismatchNoverLmax 0.04 --alignIntronMin 20 --alignIntronMax 1000000")
