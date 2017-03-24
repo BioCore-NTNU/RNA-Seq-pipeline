@@ -1,0 +1,45 @@
+if config["paired_end"]:
+
+    rule cutadapt:
+        input:
+            lambda w: config["fastq"][w.sample]
+        output:
+            first = "data/trim/{sample}_1.fastq",
+            second = "data/trim/{sample}_2.fastq",
+            # temp("data/trim/{sample}.fastq")
+        log:
+            "logs/trim/cutadapt_{sample}.log"
+        conda:
+            "rules/trim/cutadapt_env.yaml"
+        run:
+            adapters = " -b ".join(config["adapters"])
+            min_length = config["min_read_length"]
+            quality = config["fastq_quality"]
+
+            assert len(input) == 2, "Paired end mode needs two input files, got: " + ", ".join(input)
+
+            command = "cutadapt -q {quality} -m {min_length} -b {adapters} -o {output.first} -p {output.second} {input} | tee {log[0]}"
+
+            shell(command)
+
+else:
+
+    rule cutadapt:
+        input:
+            lambda: config["fastq"][w.sample]
+        output:
+            "data/trim/{sample}.fastq",
+        log:
+            "logs/trim/cutadapt_{sample}.log"
+        conda:
+            "rules/trim/cutadapt_env.yaml"
+        run:
+            adapters = " -b ".join(config["adapters"])
+            min_length = config["min_read_length"]
+            quality = config["fastq_quality"]
+
+            assert len(input) == 1, "Paired end mode needs one input file, got: " + ", ".join(input)
+
+            command = "cutadapt -q {quality} -m {min_length} -b {adapters} -o {output.first} {input} | tee {log[0]}"
+
+            shell(command)

@@ -1,5 +1,60 @@
 # Config for RNA-Seq part
 
 ---
-fasta: data/fastqs/{prefix}.fastq
+
+# ---------------------------------
+# general settings
+# ---------------------------------
+
+paired_end:
+  TRUE
+
+# ---------------------------------
+# fastqs - sample name: filename(s)
+# ---------------------------------
+
+# single end:
+# sample_name1:
+#  file1
+# sample_name2:
+#  file2
+#
+# paired end:
+# sample_name1:
+#   - file1
+#   - file2
+# sample_name2:
+#   - file1
+#   - file2
+
+fastq:
+  sample1:
+    - data/fastqs/chr21_1.fastq
+    - data/fastqs/chr21_2.fastq
+
+# ---------------------
+# files
+# ---------------------
+
 index: /local/data/genomes/GRCm38.p3/star
+gene_gff: /local/data/genomes/GRCm38.p3/GCF_000001635.23_GRCm38.p3_genomic.gff
+
+# ---------------------
+# fastq minimum quality
+# ---------------------
+
+fastq_quality:
+  - 20
+
+# -----------------
+# cutadapt settings
+# -----------------
+
+# adapter sequences
+adapters:
+  - TGGAATTCTCGGGTGCCAAGG
+  - CAAGCAGAAGACGGCATACGAGATCGTGATGTGACTGGAGTTCCTTGGCACCCGAGAATTCCA
+
+# minimum read length after trimming
+min_read_length:
+  - 14
