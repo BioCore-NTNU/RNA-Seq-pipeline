@@ -13,6 +13,7 @@ paired_end:
 # fastqs - sample name: filename(s)
 # ---------------------------------
 
+# examples:
 # single end:
 # sample_name1:
 #  file1
@@ -33,7 +34,7 @@ fastq:
     - data/fastqs/chr21_2.fastq
 
 # ---------------------
-# files
+# STAR files
 # ---------------------
 
 index: /local/data/genomes/GRCm38.p3/star
@@ -58,3 +59,11 @@ adapters:
 # minimum read length after trimming
 min_read_length:
   - 14
+
+
+# ---------------------------------
+# htseq-count settings
+# ---------------------------------
+
+# yes, no or reverse
+stranded: no

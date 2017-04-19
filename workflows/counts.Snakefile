@@ -1,8 +1,23 @@
+from subprocess import check_output
+
 files = ["align/star", "count/htseq"]
 
 for f in files:
     include:
         "../rules/" + f + ".rules"
+
+
+rule count_reads:
+    "Count the total number of reads in the fastq files"
+    input:
+        fastqs = config["fastq"]
+    output:
+        "data/count/report/{sample}_total_number_reads.txt"
+    shell:
+        "zcat {input.fastqs[0]} | tail -1 | grep -Eo '[0-9]+' | awk {{print $1/4}} > {output[0]}"
+
+rule
+
 
 rule report_counts:
     input:
@@ -10,9 +25,25 @@ rule report_counts:
         trimmed = "data/qc/{sample}.trimmed",
         align_log = "data/align/{sample}.Log.final.out"
     output:
-        "data/logs/{sample}.log"
+        "data/logs/{sample}_report.html"
     run:
-        pass
+        number_lines = check_output("zcat {input.fastqs} | tail -1 | grep -Eo '[0-9]+'", shell=True).decode().strip()
+        total_number_reads = int(number_lines/4)
+
+        # qc=$$(zcat ../processed/$(subst .int,.trimmed.gz,$<) |echo $$((`wc -l`/4)));\
+        quality_control = check_output("")
+
+    	"""Total number of reads: {total_number_reads}
+        QualityFiltered "; echo $$qc; \
+        SingleAligned "; echo $$um; \
+        MultiAligned "; echo $$mm; \
+        NotAligned "; echo $$nm; \
+        NoFeature(HTSeq) "; cat $< |grep "no_feature"|cut -f 2 ; \
+        Feature(HTseq) "; cat $< | head -n -5| cut -f 2 | perl ../scripts/Sum.pl; \
+        mRNA "; cat $*.mrna | cut -f 2 | perl ../scripts/Sum.pl; \
+        NotAligned (HTseq) "; cat $< | grep "not_aligned"|cut -f 2 ; \
+        MultiAligned (HTseq) "; cat $< | grep "alignment_not_unique"|cut -f 2 ; \
+        """
 
 
 

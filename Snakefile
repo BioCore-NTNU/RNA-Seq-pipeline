@@ -2,14 +2,12 @@ from snakemake import shell
 
 shell.executable('bash')
 
-
 configfile: "config.yaml"
 
 to_include = ["workflows/counts.Snakefile",
-         "rules/trim/cutadapt.rules"]
+              "rules/trim/cutadapt.rules"]
 
 for f in to_include:
-    print(f)
     include: f
 
 rule targets:

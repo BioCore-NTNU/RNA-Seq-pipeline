@@ -1,8 +1,9 @@
 from os.path import basename
 
 rule star:
+    "Align files using the STAR aligner"
     input:
-        fasta = "data/fastqs/{sample}.fastq",
+        fasta = lambda w: config["fastq"][w.sample],
         index = config["index"]
     output:
         "data/align/{sample}.Aligned.out.sam"

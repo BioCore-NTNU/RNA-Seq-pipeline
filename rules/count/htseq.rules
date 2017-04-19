@@ -1,4 +1,5 @@
 rule htseq_count:
+    "Count nb of reads in genes (at exon level)"
     input:
         sam = "data/align/{prefix}.Aligned.out.sam",
         gene_gff = config["gene_gff"]
@@ -7,4 +8,4 @@ rule htseq_count:
     conda:
         "rules/count/htseq_env.yaml"
     shell:
-        "htseq-count -s no -i gene -t exon {input.sam} {input.gene_gff} > {output[0]}"
+        "htseq-count -s config[stranded] -i gene -t exon {input.sam} {input.gene_gff} > {output[0]}"
