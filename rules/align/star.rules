@@ -3,11 +3,15 @@ from os.path import basename
 rule star:
     "Align files using the STAR aligner"
     input:
-        fasta = lambda w: config["fastq"][w.sample],
+        fasta = lambda w: trimmed_files(w.sample, config["paired_end"]),
         index = config["index"]
     output:
         "data/align/{sample}.Aligned.out.sam"
+    log:
+        "data/align/{sample}.Log.final.out"
+    threads:
+        12
     params:
         sample = "data/align/{sample}."
     run:
-        shell("STAR --genomeDir {input.index} --readFilesIn {input.fasta} --readFilesCommand zcat -f --outFileNameSample {params.sample} --chimSegmentMin 30 --runThreadN 12 --outFilterMultimapNmax 20 --alignSJoverhangMin 8 --alignSJDBoverhangMin 1 --outFilterMismatchNmax 10 --outFilterMismatchNoverLmax 0.04 --alignIntronMin 20 --alignIntronMax 1000000")
+        shell("STAR --genomeDir {input.index} --readFilesIn {input.fasta} --readFilesCommand zcat -f --outFileNamePrefix {params.sample} --chimSegmentMin 30 --runThreadN {threads} --outFilterMultimapNmax 20 --alignSJoverhangMin 8 --alignSJDBoverhangMin 1 --outFilterMismatchNmax 10 --outFilterMismatchNoverLmax 0.04 --alignIntronMin 20 --alignIntronMax 1000000")

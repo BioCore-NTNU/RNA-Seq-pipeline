@@ -65,5 +65,6 @@ min_read_length:
 # htseq-count settings
 # ---------------------------------
 
-# yes, no or reverse
-stranded: no
+# "yes", "no" or "reverse"
+# NOT: yes, no - these will be translated into True or False
+stranded: "no"

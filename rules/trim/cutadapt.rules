@@ -6,7 +6,6 @@ if config["paired_end"]:
         output:
             first = "data/trim/{sample}_1.fastq",
             second = "data/trim/{sample}_2.fastq",
-            # temp("data/trim/{sample}.fastq")
         log:
             "logs/trim/cutadapt_{sample}.log"
         conda:
